@@ -51,5 +51,32 @@ rename(litters_data, GROUP=group)
 ```
 
 
+##Filter
+```{r}
+filter(litters_data, group == "Mod8")
+## double = is "does this value equal to" as a question, not given value
+
+filter(litters_data, gd_of_birth ==20)
+
+filter(litters_data, gd_of_birth >=20)
+
+filter(litters_data, gd_of_birth >=20, pups_born_alive !=4)
+
+filter(litters_data, group =="Con7"| group =="Mod8")
+#"Or statement" equivalent to
+filter(litters_data, group %in% c("Con7", "Mod8"))
+
+#range
+filter(litters_data, gd_of_birth >=20, gd_of_birth <=22)
+
+filter(litters_data, gd0_weight + gd18_weight > 70)
+
+#don't do filter(litters_data, is.na(gd0_weight)), drop null value
+drop_na(litters_data)
+#drop null value only in gd0_weight column
+drop_na(litters_data, gd0_weight)
+```
+
+
 
 
