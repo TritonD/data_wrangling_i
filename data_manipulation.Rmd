@@ -81,7 +81,6 @@ drop_na(litters_data, gd0_weight)
 ##mutate
 ```{r}
 mutate(litters_data, wt_gain = gd18_weight -gd0_weight,
-        group = str_to_lower(group)
         group = str_to_upper(group)
 )
 #make the string all lower cases
@@ -95,6 +94,26 @@ arrange(litters_data, pups_born_alive)
 arrange(litters_data, desc(pups_born_alive))
 ```
 
+##pipe
+```{r}
+litters_data = 
+  read_csv("./FAS_litters.csv") %>%
+  janitor::clean_names() %>%
+  select(-pups_survive) %>%
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group)) %>% 
+  drop_na(wt_gain)
+
+```
+
+
+```{r}
+litters_data %>%
+  lm(wt_gain ~ pups_born_alive, data = .) %>%
+  broom::tidy()
+#lm=linear model
+```
 
 
 
