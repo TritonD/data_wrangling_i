@@ -1,5 +1,5 @@
 ---
-title: "data_wrangling_i"
+title: "data_manipulation"
 author: "TritonD"
 date: "9/17/2019"
 output: html_document
@@ -14,62 +14,40 @@ library(tidyverse)
 ```
 
 ```{r}
-##reads in a dataset
-litters_data = read_csv(file = "./FAS_litters.csv")
-```
-```{r}
-names(litters_data)
-```
-```{r}
-litters_data
-```
+options(tibble.print_min = 3)
 
+litters_data = read_csv("./FAS_litters.csv",
+  col_types = "ccddiiii")
+litters_data = janitor::clean_names(litters_data)
 
-```{r}
-#load in pups data
-pups_data=read_csv(file = "./FAS_pups.csv")
-```
-```{r}
-pups_data
-```
-```{r}
-skimr::skim(litters_data)
-```
-```{r}
-litters_data = read_csv(file = "./FAS_litters.csv",
-  skip = 10, col_names = FALSE)
-head(litters_data)
-```
-```{r}
-#play with column parsing
-#with a space inside variable name, need quote sign
-litters_data = read_csv(file = "./FAS_litters.csv",
-  col_types = cols(
-    Group = col_character(),
-    `Litter Number` = col_character(),
-    `GD0 weight` = col_double(),
-    `GD18 weight` = col_double(),
-    `GD of Birth` = col_integer(),
-    `Pups born alive` = col_integer(),
-    `Pups dead @ birth` = col_integer(),
-    `Pups survive` = col_integer()
-  )
-)
+pups_data = read_csv("./FAS_pups.csv",
+  col_types = "ciiiii")
+pups_data = janitor::clean_names(pups_data)
+
 ```
 
 ```{r}
-# read in excel file
-```
-```{r}
-mlb11_data=read_excel(path = "./mlb11.xlsx")
-```
-```{r}
-#read in SAS
-pulse_data= haven::read_sas("./public_pulse_data.sas7bdat")
-```
+#select, insert orders matter
+select(litters_data, group, litter_number)
 
-```{r}
-write_csv(mlb11_data_subset, path ="./m;b_subset.csv")
+select(litters_data, group, litter_number, gd0_weight, starts_with("pups"))
+
+select(litters_data, litter_number, group, gd0_weight)
+
+select(litters_data, litter_number, group, everything())
+#select everything after selecting litter_number and group
+
+select(litters_data, -group)
+#select all except group
+
+select(litters_data, group, litter_number, gd0_weight:pups_born_alive)
+#by now, haven't done anything change the data frame
+
+select(litters_data, GROUP = group, litter_number)
+#rename "group" with all capital letter
+
+rename(litters_data, GROUP=group)
+#difference with select: rename only rename that variable, don't delete other
 ```
 
 
